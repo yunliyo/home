@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Bookmarks</title>
+    <link rel="icon" href="../img/logo.jpg" type="image/x-icon">
+	<link rel="shortcut icon" href="../img/logo.jpg" type="image/x-icon">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-touch-fullscreen" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="full-screen" content="yes">
+    <!--UC强制全屏-->
+    <meta name="browsermode" content="application">
+    <!--UC应用模式-->
+    <meta name="x5-fullscreen" content="true">
+    <!--QQ强制全屏-->
+    <meta name="x5-page-mode" content="app">
+    <!--QQ应用模式-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" id="font-awesome-css" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css?ver=1.1422" type="text/css" media="all">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://at.alicdn.com/t/font_1230786_ewprpwrczvj.js"></script>
+    <script>
+        //关键词sug
+        $(function () {
+            //当键盘键被松开时发送Ajax获取数据
+            $('#search-text').keyup(function () {
+                var keywords = $(this).val();
+                if (keywords == '') {
+                    $('#word').hide();
+                    return
+                };
+                $.ajax({
+                    url: 'https://suggestion.baidu.com/su?wd=' + keywords,
+                    dataType: 'jsonp',
+                    jsonp: 'cb', //回调函数的参数名(键值)key
+                    // jsonpCallback: 'fun', //回调函数名(值) value
+                    beforeSend: function () {
+                        // $('#word').append('<li>正在加载。。。</li>');
+                    },
+                    success: function (data) {
+                        $('#word').empty().show();
+                        if (data.s == '') {
+                            //$('#word').append('<div class="error">Not find  "' + keywords + '"</div>');
+                            $('#word').empty();
+                            $('#word').hide();
+                        }
+                        $.each(data.s, function () {
+                            $('#word').append('<li>' + this + '</li>');
+                        })
+                    },
+                    error: function () {
+                        $('#word').empty().show();
+                        //$('#word').append('<div class="click_work">Fail "' + keywords + '"</div>');
+                        $('#word').hide();
+                    }
+                })
+            })
+            //点击搜索数据复制给搜索框
+            $(document).on('click', '#word li', function () {
+                var word = $(this).text();
+                $('#search-text').val(word);
+                $('#word').empty();
+                $('#word').hide();
+                //$("form").submit();
+                $('.submit').trigger('click'); //触发搜索事件
+            })
+            $(document).on('click', '.container,.banner-video,nav', function () {
+                $('#word').empty();
+                $('#word').hide();
+            })
+
+        })
+    </script>
+</head>
+
+<body leftmargin=0 topmargin=0 oncontextmenu='return false' ondragstart='return false' onselectstart='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false' onmouseup='document.selection.empty()'>
+    <!--视频头部背景-->
+    <div class="banner-video">
+        <!--视频来自阿里云首页，有需要请自行更换-->
+        <!--video autoplay loop muted>
+            <source src="https://cdn.jsdelivr.net/gh/5iux/uploads/pic/3840-banner.mp4" type="video/mp4">
+        </video-->
+        <!--注释掉图片可换成视频版本-->
+        <img src="../img/bg.jpg" alt="">
+        <div class="bottom-cover" style="background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgb(244 248 251 / 0.6) 50%, rgb(244 248 251) 100%);"></div>
+    </div>
+    <!--topbar开始-->
+    <style>
+        .navbar-toggler svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .navbar-toggler .bi-list-nested {
+            display: none;
+        }
+
+        .navbar-toggler.collapsed .bi-list-nested {
+            display: block;
+        }
+
+        .navbar-toggler.collapsed .bi-x {
+            display: none;
+        }
+
+        .navbar-toggler .bi-x {
+            display: block;
+        }
+    </style>
+    <style>
+        body {
+            font-size: 14px;
+            background: #f4f8fb;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+        }
+
+        svg.icon {
+            width: 14px;
+            height: 14px;
+            margin: 0 5px 0 8px;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+
+        /*menu*/
+        .navbar-light .navbar-nav .nav-link {
+            color: #fff;
+        }
+
+        .navbar-light .navbar-nav .active .nav-link {
+            color: #fff;
+        }
+
+        .navbar-light .navbar-nav .nav-link:hover {
+            color: #fff;
+        }
+
+        /* --- search --- */
+        #search {
+            width: 100%;
+            margin: 0;
+            padding: 0 0 10px;
+            position: relative;
+            z-index: 2000;
+            border-radius: 5px;
+        }
+
+        #search form {
+            position: relative
+        }
+
+        #search-text {
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            text-indent: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #fff;
+            border: none;
+            box-shadow: 0 0.5rem 0.625rem #d4d4d44d;
+            transition: 0.3s all linear;
+        }
+
+        #search-text:focus {
+            background: #fff;
+            box-shadow: 0 0px 24px 0 rgba(50, 50, 50, 0.08);
+            border-color: #fff;
+        }
+
+        #search button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: 0;
+            border-radius: 20px;
+            width: 60px;
+            height: 36px;
+            margin: 7px 0 0;
+            line-height: 36px;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        #search button:hover {
+            cursor: pointer
+        }
+
+        #search button i {
+            color: #ddd;
+            font-size: 18px
+        }
+
+        .search-group {
+            display: none;
+            padding-left: 75px
+        }
+
+        .s-current .search-type {
+            padding-left: 0;
+            display: block
+        }
+
+        .s-current {
+            display: block
+        }
+
+        #search-list {
+            position: relative
+        }
+
+        .s-type {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 13;
+            width: 75px
+        }
+
+        .s-type:hover {
+            height: auto
+        }
+
+        .s-type>span {
+            display: block;
+            height: 31px;
+            width: 75px
+        }
+
+        .s-type-list {
+            display: none;
+            position: absolute;
+            top: 31px;
+            padding: 9pt 0;
+            width: 70px;
+            background: #fff;
+            border-radius: 5px;
+            box-shadow: 0 9px 20px rgba(0, 0, 0, .16)
+        }
+
+        .s-type-list:before {
+            position: absolute;
+            top: -1pc;
+            left: 20px;
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+            border-bottom-color: #fff
+        }
+
+        .s-type-list label {
+            display: block;
+            font-size: 15px;
+            text-align: center;
+            font-weight: normal;
+            margin-bottom: 0;
+            padding: 2px 0;
+            cursor: pointer;
+            transition: .3s
+        }
+
+        .s-type-list label:hover {
+            background: rgba(136, 136, 136, .1)
+        }
+
+        .s-type-list .tile-lg {
+            color: #fff;
+            width: 3pc;
+            height: 3pc;
+            font-size: 1.25rem;
+            line-height: 3rem;
+            border-radius: .3rem;
+            display: block;
+            margin: auto
+        }
+
+        .s-type:hover .s-type-list {
+            display: block
+        }
+
+        .type-text {
+            position: absolute;
+            left: 0;
+            width: 75px;
+            padding-left: 9pt;
+            font-size: 1pc;
+            line-height: 31px
+        }
+
+        /*.type-text:after{content:"\f105";font-family:FontAwesome;margin:0 0 0 15px}*/
+        .search-type {
+            white-space: nowrap;
+            margin: 0
+        }
+
+        .search-type label {
+            margin: 0
+        }
+
+        .search-type li {
+            display: inline-block;
+            background: rgb(255 255 255 / 0.4);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .search-type li label {
+            display: inline-block;
+            padding: 0 11px;
+            font-size: 14px;
+            line-height: 31px;
+            border-radius: 3px 3px 0 0;
+            cursor: pointer
+        }
+
+        .search-type input:checked+label,
+        .search-type input:hover+label {
+            background-color: #fff;
+        }
+
+        #search-text::-webkit-input-placeholder {
+            color: #bbb;
+        }
+
+        #word {
+            position: absolute;
+            list-style: none;
+            top: 55px;
+            left: 0px;
+            width: 100%;
+            background: rgba(259, 259, 259, 0.9);
+            border-radius: 5px;
+            z-index: 20000;
+            padding: 15px 10px;
+            box-shadow: 0 0 10px #aaa;
+        }
+
+        #word li {
+            height: 35px;
+            padding: 0 5px;
+            text-indent: 30px;
+            background: url(sou.svg) no-repeat 5px;
+            background-size: 20px;
+            line-height: 35px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        #word li:hover {
+            background-color: #ddd;
+        }
+
+        .set-check {
+            margin-top: 3px;
+            font-size: 9pt
+        }
+
+        .set-check label {
+            margin-left: 3px
+        }
+
+        .set-check input,
+        .set-check label {
+            opacity: 0;
+            transition: all .3s ease
+        }
+
+        .search-type li {
+            list-style: none;
+            display: inline-block
+        }
+
+        .mylist {
+            list-style: none;
+            padding: 10px 20px;
+            position: relative;
+            z-index: 1000;
+            margin: 20px 0;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 0.5rem 0.625rem #d4d4d44d
+        }
+
+        .mylist li.col-3 {
+            width: 100px;
+            transition: 0.3s all linear;
+            font-size: 14px;
+            overflow: hidden;
+            padding: 10px 0;
+            border-radius: 10px;
+        }
+
+        .mylist li.col-3 svg {
+            display: block;
+            width: 45px;
+            height: 45px;
+            padding: 8px;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin: 0 auto;
+        }
+
+        .mylist li.col-3:hover {
+            background: #eee;
+        }
+
+        .mylist li.col-3 span {
+            width: 100%;
+            display: block;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .mylist li a {
+            color: #555;
+            display: block;
+        }
+
+        .mylist li.title {
+            width: 100%;
+            min-width: auto;
+            margin: 0;
+            height: 35px;
+            font-size: 16px;
+            line-height: 33px;
+            padding: 0 20px 0 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+
+        .banner-video {
+            position: absolute;
+            width: 100%;
+            overflow: hidden;
+            left: 0;
+            top: 0;
+            max-height: 750px;
+        }
+
+        .banner-video video {
+            width: 2048px;
+            float: left;
+        }
+
+        .banner-video img {
+            width: 1920px;
+            float: left;
+        }
+
+        .bottom-cover {
+            width: 100%;
+            height: 50%;
+            position: absolute;
+            bottom: 0px;
+            z-index: 10;
+        }
+
+        @media screen and (min-width:1200px) {
+            .mylist li.col-3 {
+                min-width: 132px;
+            }
+        }
+
+        @media screen and (min-width:992px) and (max-width:1200px) {
+            .mylist li.col-3 {
+                min-width: 110px;
+            }
+        }
+
+        @media screen and (max-width: 992px) {
+            #he-plugin-simple {
+                display: none !important;
+            }
+
+            .banner-video video {
+                width: 1200px;
+            }
+
+            .banner-video img {
+                width: 1200px;
+            }
+
+            div#navbarsExample05 {
+                background: rgba(0, 0, 0, 0.8);
+                padding: 10px 30px;
+                border-radius: 20px;
+            }
+        }
+
+        @media screen and (max-width:767px) {
+            .banner-video video {
+                width: 960px;
+            }
+
+            .banner-video img {
+                width: 960px;
+            }
+
+            .s-type-list label {
+                padding: 5px 0
+            }
+
+            .search-type {
+                overflow: hidden
+            }
+
+            .search-list {
+                height: 30px;
+                overflow-y: hidden;
+                overflow-x: scroll;
+                white-space: nowrap
+            }
+
+            .mylist {
+                border-radius: 8px;
+            }
+
+            .mylist li.col-3 {
+                margin: 5px 0 5px;
+            }
+
+            .mylist li.col-3 svg {
+                width: 30px;
+                height: 30px;
+                padding: 5px;
+                border-radius: 5px;
+            }
+
+            .mylist li.col-3 span {
+                font-size: 12px;
+            }
+
+
+        }
+
+        @media screen and (max-width:560px) {}
+
+
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #eee;
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ddd;
+            border-radius: 0px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ccc;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: #ddd;
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="position: absolute; z-index: 10000;">
+        <a class="navbar-brand" href=""><img src="../img/logo.png" height="35" style=" margin-left: 0px;" alt=""></a>
+        <button class="navbar-toggler collapsed" style="border: none; outline: none;" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation"> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="bi bi-list-nested" fill="currentColor" id="list-nested"> <path fill-rule="evenodd" d="M4.5 11.5A.5.5 0 015 11h10a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm-2-4A.5.5 0 013 7h10a.5.5 0 010 1H3a.5.5 0 01-.5-.5zm-2-4A.5.5 0 011 3h10a.5.5 0 010 1H1a.5.5 0 01-.5-.5z"> </path> </svg><span> <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="bi bi-x" fill="currentColor" id="x"> <path fill-rule="evenodd" d="M11.854 4.146a.5.5 0 010 .708l-7 7a.5.5 0 01-.708-.708l7-7a.5.5 0 01.708 0z"></path> <path fill-rule="evenodd" d="M4.146 4.146a.5.5 0 000 .708l7 7a.5.5 0 00.708-.708l-7-7a.5.5 0 00-.708 0z"></path></svg><span></button>
+        <div class="collapse navbar-collapse" id="navbarsExample05">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active"><a class="nav-link" href="./news.html">News</a></li>
+                <li class="nav-item active"><a class="nav-link" href="./study.html">Study</a></li>
+                <li class="nav-item active"><a class="nav-link" href="./tool.html">ICT</a></li>
+            </ul>
+            <style>
+                #he-plugin-simple {
+                    z-index: 1000;
+                }
+            </style>
+            <div id="he-plugin-simple"></div>
+            <script>
+                WIDGET = {
+                    CONFIG: {
+                        "modules": "01234",
+                        "background": 5,
+                        "tmpColor": "4A4A4A",
+                        "tmpSize": 14,
+                        "cityColor": "4A4A4A",
+                        "citySize": 14,
+                        "aqiSize": 14,
+                        "weatherIconSize": 22,
+                        "alertIconSize": 16,
+                        "padding": "8px 8px 8px 8px",
+                        "shadow": "1",
+                        "language": "auto",
+                        "borderRadius": 5,
+                        "fixed": "false",
+                        "vertical": "middle",
+                        "horizontal": "center",
+                        "key": "acd0fdcab4b9481a98d0f59145420fac"
+                    }
+                }
+            </script>
+            <script src="https://widget.heweather.net/simple/static/js/he-simple-common.js?v=1.1"></script>
+        </div>
+    </nav>
+    <!--topbar结束-->
+    <div class="container" style="margin-top: 100px; position: relative; z-index: 100;">
+        <!--搜索开始-->
+        <div id="search" class="s-search">
+            <div id="search-list" class="hide-type-list">
+                <div class="search-group group-a s-current" style="padding-left: 20px">
+                    <ul class="search-type">
+                        <li><input checked="" hidden="" type="radio" name="type" id="type-baidu" value="https://www.baidu.com/s?wd=" data-placeholder="百度一下"><label for="type-baidu"><span style="color:#2100E0">百度</span></label></li>
+                        <li><input hidden="" type="radio" name="type" id="type-google" value="https://www.google.com.hk/search?hl=zh-CN&q=" data-placeholder="谷歌搜索"><label for="type-google"><span style="color:#3B83FA">G</span><span style="color:#F3442C">o</span><span style="color:#FFC300">o</span><span style="color:#4696F8">g</span><span style="color:#2CAB4E">l</span><span style="color:#F54231">e</span></label></li>
+                        <li><input checked="" hidden="" type="radio" name="type" id="type-bing" value="https://cn.bing.com/search?q=" data-placeholder="必应搜索"><label for="type-bing"><span style="color:#2100E0">Bing</span></label></li>
+                    </ul>
+                </div>
+            </div>
+            <form action="https://www.baidu.com/s?wd=" method="get" target="_blank" id="super-search-fm">
+                <input type="text" id="search-text" placeholder="百度一下" style="outline:0" autocomplete="off">
+                <button class="submit" type="submit"><svg style="width: 20px; height: 20px; margin:7px 0; color: #29f;" class="icon" aria-hidden="true"> <use xlink:href="#icon-sousuo"></use> </svg><span></button>
+                <ul id="word" style="display: none;"></ul>
+            </form>
+            <div class="set-check hidden-xs">
+                <input type="checkbox" id="set-search-blank" class="bubble-3" autocomplete="off">
+            </div>
+        </div>
+        <!--搜索结束-->
+        <ul class="mylist row">
+            <!------>
+            <li class="title">技术教程</li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.w3school.com.cn/" target="_blank"><span>W3school</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.runoob.com/" target="_blank"><span>菜鸟教程</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.liaoxuefeng.com/" target="_blank"><span>廖雪峰</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="http://c.biancheng.net/" target="_blank"><span>C语言</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.linuxprobe.com/" target="_blank"><span>Linux</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.ictxuetang.com/cict/pc/home" target="_blank"><span>ICT学堂</span></a></li>
+        </ul>
+        <ul class="mylist row">
+            <li class="title">技术社区</li>
+             <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://stackoverflow.com/" target="_blank"><span>StackOverflow</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.quora.com/" target="_blank"><span>Quora</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://cloud.tencent.com/developer" target="_blank"><span>云+社区</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://developer.aliyun.com/" target="_blank"><span>云栖社区</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.cnblogs.com/" target="_blank"><span>博客园</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.csdn.net/" target="_blank"><span>CSDN</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.oschina.net/" target="_blank"><span>OSChina</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="http://www.51testing.com/" target="_blank"><span>51testing</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.52pojie.cn/" target="_blank"><span>吾爱破解</span></a></li>
+        </ul>
+        <ul class="mylist row">
+            <li class="title">GayHub</li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.npmjs.com/" target="_blank"><span>npm</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://git-scm.com/" target="_blank"><span>Git</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://github.com/" target="_blank"><span>GitHub</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitee.com/" target="_blank"><span>Gitee</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitlab.com/" target="_blank"><span>GitLab</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://coding.net/" target="_blank"><span>Coding</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.netlify.com/" target="_blank"><span>Netlify</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://vercel.com/" target="_blank"><span>Vercel</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.cloudflare.com/" target="_blank"><span>Cloudflare</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.aliyun.com/" target="_blank"><span>阿里云</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.huaweicloud.com/" target="_blank"><span>华为云</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.upyun.com/" target="_blank"><span>又拍云</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.qiniu.com/" target="_blank"><span>七牛云</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://pan.baidu.com/" target="_blank"><span>百度云盘</span></a></li>
+        </ul>
+        <ul class="mylist row">
+            <li class="title">HUAWEI</li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.huawei.com/" target="_blank"><span>华为官网</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://support.huawei.com/" target="_blank"><span>华为技术支持</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://developer.huawei.com/" target="_blank"><span>华为开发者</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.huaweicloud.com/" target="_blank"><span>华为云</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://developer.huaweicloud.com/" target="_blank"><span>华为云开发者</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.huawei.com/minisite/liteos/" target="_blank"><span>LiteOS</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://liteos.gitee.io/liteos_studio/" target="_blank"><span>LiteOS文档</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitee.com/LiteOS/" target="_blank"><span>LiteOS仓库</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://bbs.huaweicloud.com/forum/forum-734-1.html" target="_blank"><span>BearPi论坛</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitee.com/bearpi/" target="_blank"><span>BearPi仓库</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitee.com/bearpi/bearpi-hm_nano" target="_blank"><span>BearPi-IoT</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.harmonyos.com/" target="_blank"><span>HarmonyOS</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.openharmony.cn/" target="_blank"><span>开源鸿蒙</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://gitee.com/openharmony" target="_blank"><span>鸿蒙社区</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.raspberrypi.org/" target="_blank"><span>RaspberryPi</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://shumeipai.nxez.com/" target="_blank"><span>树莓派实验室</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://raspberrypi.club/" target="_blank"><span>树莓派俱乐部</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://linux.cn/tech/raspberrypi/" target="_blank"><span>树莓派论坛</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://club.huawei.com/" target="_blank"><span>花粉俱乐部</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.vmall.com/" target="_blank"><span>华为商城</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://appgallery.huawei.com/" target="_blank"><span>华为应用中心</span></a></li>
+        </ul>
+        <ul class="mylist row">
+            <li class="title">软件下载</li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://downloadly.ir/" target="_blank"><span>Downloadly</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://mac-torrents.io/" target="_blank"><span>Mac-torrents</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://nsaneforums.com/forum/48-software-updates/" target="_blank"><span>Nsaneforums</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://forum.mobilism.org/viewforum.php?f=399" target="_blank"><span>Mobilism</span></a></li>
+        </ul>
+        <ul class="mylist row">
+            <li class="title">在线工具</li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.logoly.pro/" target="_blank"><span>Diy-logo</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="http://www.diyiziti.com/" target="_blank"><span>书法字体网</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.iconfont.cn/" target="_blank"><span>iconfont</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://huaban.com/" target="_blank"><span>花瓣</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.duitang.com/" target="_blank"><span>堆糖</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://cli.im/" target="_blank"><span>草料二维码</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="http://www.toolnb.com/" target="_blank"><span>爱资料工具箱</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://github.com/Molunerfinn/PicGo" target="_blank"><span>PicGo</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.jsdelivr.com/" target="_blank"><span>jsDelivr</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://unpkg.com/" target="_blank"><span>Unpkg</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://cdnjs.net/" target="_blank"><span>cdnjs</span></a></li>
+            <li class="col-3 col-sm-3 col-md-3 col-lg-1"><a rel="nofollow" href="https://www.upyun.com/league" target="_blank"><span>又拍云联盟</span></a></li>
+        </ul>
+    </div>
+    <!--版权信息开始-->
+    <p class="mt-5 mb-3 text-muted text-center">Made by Yunli.</p>
+    <!--版权信息结束-->
+    <script>
+        eval(function (e, t, a, c, i, n) {
+            if (i = function (e) {
+                    return (e < t ? "" : i(parseInt(e / t))) + (35 < (e %= t) ? String.fromCharCode(e + 29) : e
+                        .toString(36))
+                }, !"".replace(/^/, String)) {
+                for (; a--;) n[i(a)] = c[a] || i(a);
+                c = [function (e) {
+                    return n[e]
+                }], i = function () {
+                    return "\\w+"
+                }, a = 1
+            }
+            for (; a--;) c[a] && (e = e.replace(new RegExp("\\b" + i(a) + "\\b", "g"), c[a]));
+            return e
+        }('!2(){2 g(){h(),i(),j(),k()}2 h(){d.9=s()}2 i(){z a=4.8(\'A[B="7"][5="\'+p()+\'"]\');a&&(a.9=!0,l(a))}2 j(){v(u())}2 k(){w(t())}2 l(a){P(z b=0;b<e.O;b++)e[b].I.1c("s-M");a.F.F.F.I.V("s-M")}2 m(a,b){E.H.S("L"+a,b)}2 n(a){6 E.H.Y("L"+a)}2 o(a){f=a.3,v(u()),w(a.3.5),m("7",a.3.5),c.K(),l(a.3)}2 p(){z b=n("7");6 b||a[0].5}2 q(a){m("J",a.3.9?1:-1),x(a.3.9)}2 r(a){6 a.11(),""==c.5?(c.K(),!1):(w(t()+c.5),x(s()),s()?E.U(b.G,+T X):13.Z=b.G,10 0)}2 s(){z a=n("J");6 a?1==a:!0}2 t(){6 4.8(\'A[B="7"]:9\').5}2 u(){6 4.8(\'A[B="7"]:9\').W("14-N")}2 v(a){c.1e("N",a)}2 w(a){b.G=a}2 x(a){a?b.3="1a":b.16("3")}z y,a=4.R(\'A[B="7"]\'),b=4.8("#18-C-19"),c=4.8("#C-12"),d=4.8("#17-C-15"),e=4.R(".C-1b"),f=a[0];P(g(),y=0;y<a.O;y++)a[y].D("Q",o);d.D("Q",q),b.D("1d",r)}();',
+            62, 77,
+            "||function|target|document|value|return|type|querySelector|checked||||||||||||||||||||||||||var|input|name|search|addEventListener|window|parentNode|action|localStorage|classList|newWindow|focus|superSearch|current|placeholder|length|for|change|querySelectorAll|setItem|new|open|add|getAttribute|Date|getItem|href|void|preventDefault|text|location|data|blank|removeAttribute|set|super|fm|_blank|group|remove|submit|setAttribute"
+            .split("|"), 0, {}));
+    </script>
+    <script>
+		window.dataLayer = window.dataLayer || [];
+
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'G-FPTGP6CWZV');
+	</script>
+	<script>
+		window.onkeydown = window.onkeyup = window.onkeypress = function (event) {
+			if (event.keyCode == 123) {
+				event.preventDefault();
+				window.event.returnValue = false;
+			}
+		}
+	</script>
+	<script>
+		var threshold = 160;
+		var check = setInterval(function () {
+			if (window.outerWidth - window.innerWidth > threshold ||
+				window.outerHeight - window.innerHeight > threshold) {
+				window.location.reload();
+			}
+		}, 1000);
+	</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>
